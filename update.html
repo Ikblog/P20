@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>P20' - Transform Your Life by 2030</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .hero {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.05)"/><circle cx="50" cy="10" r="0.5" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .floating-shapes {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .shape {
+            position: absolute;
+            opacity: 0.1;
+            animation: float 20s infinite linear;
+        }
+
+        .shape:nth-child(1) {
+            top: 20%;
+            left: 10%;
+            width: 80px;
+            height: 80px;
+            background: white;
+            border-radius: 50%;
+            animation-delay: 0s;
+        }
+
+        .shape:nth-child(2) {
+            top: 60%;
+            right: 10%;
+            width: 60px;
+            height: 60px;
+            background: white;
+            transform: rotate(45deg);
+            animation-delay: -5s;
+        }
+
+        .shape:nth-child(3) {
+            bottom: 30%;
+            left: 5%;
+            width: 100px;
+            height: 100px;
+            background: white;
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+            animation-delay: -10s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            33% { transform: translateY(-20px) rotate(120deg); }
+            66% { transform: translateY(10px) rotate(240deg); }
+        }
+
+        .hero-content {
+            text-align: center;
+            color: white;
+            max-width: 800px;
+            padding: 2rem;
+            z-index: 10;
+            position: relative;
+        }
+
+        .logo {
+            font-size: 4rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #fff, #f0f8ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 20px rgba(255,255,255,0.5); }
+            to { text-shadow: 0 0 30px rgba(255,255,255,0.8), 0 0 40px rgba(255,255,255,0.3); }
+        }
+
+        .tagline {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease-out 0.5s both;
+        }
+
+        .description {
+            font-size: 1.1rem;
+            margin-bottom: 3rem;
+            opacity: 0.8;
+            line-height: 1.8;
+            animation: fadeInUp 1s ease-out 1s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeInUp 1s ease-out 1.5s both;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #ff6b6b, #ffa726);
+            color: white;
+            box-shadow: 0 10px 30px rgba(255, 107, 107, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(255, 107, 107, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-3px);
+        }
+
+        .section {
+            padding: 5rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 3rem;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .principles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .principle-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(102, 126, 234, 0.1);
+        }
+
+        .principle-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(102, 126, 234, 0.2);
+        }
+
+        .principle-number {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .principle-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .features-section {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+        }
+
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+        }
+
+        .why-choose {
+            background: #1a1a2e;
+            color: white;
+        }
+
+        .why-choose .section-title {
+            color: white;
+            background: linear-gradient(45deg, #ffa726, #ff6b6b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .benefits-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .benefit-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .benefit-check {
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(45deg, #ffa726, #ff6b6b);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .final-cta {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            padding: 5rem 2rem;
+        }
+
+        .final-cta .section-title {
+            color: white;
+            margin-bottom: 2rem;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 4rem;
+            margin: 3rem 0;
+            flex-wrap: wrap;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 900;
+            display: block;
+            color: #ffa726;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            opacity: 0.8;
+        }
+
+        @media (max-width: 768px) {
+            .logo {
+                font-size: 2.5rem;
+            }
+            
+            .tagline {
+                font-size: 1.2rem;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .principles-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats {
+                gap: 2rem;
+            }
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateX(-50%) translateY(0);
+            }
+            40% {
+                transform: translateX(-50%) translateY(-10px);
+            }
+            60% {
+                transform: translateX(-50%) translateY(-5px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="floating-shapes">
+            <div class="shape"></div>
+            <div class="shape"></div>
+            <div class="shape"></div>
+        </div>
+        
+        <div class="hero-content">
+            <h1 class="logo">P20'</h1>
+            <p class="tagline">Transform Your Life by 2030</p>
+            <p class="description">
+                Unlock your full potential with 20 powerful life principles designed to shape your future. 
+                More than just an app—it's your personal blueprint for intentional living, purposeful action, 
+                and holistic transformation.
+            </p>
+            <div class="cta-buttons">
+                <a href="#" class="btn btn-primary">
+                    🚀 Start Your Journey
+                </a>
+                <a href="#features" class="btn btn-secondary">
+                    ✨ Explore Features
+                </a>
+            </div>
+        </div>
+        
+        <div class="scroll-indicator">
+            <div style="font-size: 2rem;">↓</div>
+        </div>
+    </section>
+
+    <!-- What is P20 Section -->
+    <section class="section">
+        <h2 class="section-title">🌟 What is P20'?</h2>
+        <p style="text-align: center; font-size: 1.2rem; max-width: 800px; margin: 0 auto; color: #666; line-height: 1.8;">
+            P20' stands for 20 core principles that touch every area of life—from time and financial management 
+            to resilience, emotional intelligence, leadership, wellness, and spiritual purpose. These are the 
+            foundational habits and mindsets of successful, fulfilled individuals in the 21st century.
+        </p>
+    </section>
+
+    <!-- 20 Principles Section -->
+    <section class="section">
+        <h2 class="section-title">📘 The 20 Life Principles</h2>
+        <div class="principles-grid">
+            <div class="principle-card">
+                <div class="principle-number">1</div>
+                <h3 class="principle-title">Time Management</h3>
+            </div>
+            <div class="principle-card">
+                <div class="principle-number">2</div>
+                <h3 class="principle-title">Goal Setting</h3>
+            </div>
+            <div class="principle-card">
+                <div class="principle-number">3</div>
+                <h3 class="principle-title">Resilience and Perseverance</h3>
+            </div>
+            <div class="principle-card">
+                <div class="principle-number">4</div>
+                <h3 class="principle-title">Financial Management</h3>
+            </div>
+            <div class="principle-card">
+                <div class="principle-number">5</div>
+                <h3 class="principle-title">Communication</h3>
+            </div>
+            <div class="principle-card">
+                <div class="principle-number">6</div>
+                <h3 class="principle-title">Leadership</h3>
+            </div>
+            <div class="principle-card">
+                <div class="principle-number">7</div>
+                <h3 class="principle-title">Teamwork and Collaboration</h3>
+            </div>
+            <div class="principle-card">
+                <div class="principle-number">8</div>
+                <h3 class="principle-title">Adaptability and Flexibility</h3>
+            </div>
+            <div class="principle-card">
+                <div class="principle-number">9</div>
+                <h3 class="principle-title">Problem-Solving and Creativity</h3>
+            </div>
+            <div class="principle-card">
+                <div class="principle-number">10</div>
+                <h3 class="principle-title">Emotional Intelligence</h3>
+            </div>
+            <div class="principle-card">
+                <div class="principle-number">11</div>
+                <h3 class="principle-title">Self-Care and Wellness</h3>
+            </div>
+            <div class="principle-card">
+                <div class="principle-number">12</div>
+                <h3 class="principle-title">Relationship Building</h3>
+            </div>
+            <div class="principle-card">
+                <div class="principle-number">13</div>
+                <h3 class="principle-title">Personal Growth and Development</h3>
+            </div>
+            <div class="principle-card">
+                <div class="principle-number">14</div>
+                <h3 class="principle-title">Accountability and Responsibility</h3>
+            </div>
+            <div class="principle-card">
+                <div class="principle-number">15</div>
+                <h3 class="principle-title">Integrity and Ethics</h3>
+            </div>
+            <div class="principle-card">
+                <div class="principle-number">16</div>
+                <h3 class="principle-title">Learning and Continuous Improvement</h3>
+            </div>
+            <div class="principle-card">
+                <div class="principle-number">17</div>
+                <h3 class="principle-title">Risk-Taking and Innovation</h3>
+            </div>
+            <div class="principle-card">
+                <div class="principle-number">18</div>
+                <h3 class="principle-title">Self-Discipline and Productivity</h3>
+            </div>
+            <div class="principle-card">
+                <div class="principle-number">19</div>
+                <h3 class="principle-title">Positive Attitude and Mindset</h3>
+            </div>
+            <div class="principle-card">
+                <div class="principle-number">20</div>
+                <h3 class="principle-title">Spiritual Growth and Purpose</h3>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section" id="features">
+        <div class="section">
+            <h2 class="section-title">🔑 Key Features</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📅</div>
+                    <h3 style="margin-bottom: 1rem; font-size: 1.3rem;">Daily Growth Tasks</h3>
+                    <p style="color: #666;">Simple, powerful daily challenges that keep you focused and consistent on your transformation journey.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📚</div>
+                    <h3 style="margin-bottom: 1rem; font-size: 1.3rem;">Core Lessons</h3>
+                    <p style="color: #666;">Learn through engaging text, audio, or video content with practical insights and real-life examples.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3 style="margin-bottom: 1rem; font-size: 1.3rem;">Interactive Tracker</h3>
+                    <p style="color: #666;">Measure your progress as you complete each principle and unlock meaningful milestones.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📝</div>
+                    <h3 style="margin-bottom: 1rem; font-size: 1.3rem;">Reflective Journaling</h3>
+                    <p style="color: #666;">Record thoughts, lessons learned, and insights in your personal growth journal.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🧠</div>
+                    <h3 style="margin-bottom: 1rem; font-size: 1.3rem;">Quizzes & Assessments</h3>
+                    <p style="color: #666;">Understand where you stand and how far you've come on your personal growth journey.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🙏</div>
+                    <h3 style="margin-bottom: 1rem; font-size: 1.3rem;">Spiritual Corner</h3>
+                    <p style="color: #666;">Biblical guidance, scripture-based encouragement, and devotions aligned with each principle.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Choose Section -->
+    <section class="why-choose">
+        <div class="section">
+            <h2 class="section-title">💡 Why Choose P20'?</h2>
+            <div class="benefits-list">
+                <div class="benefit-item">
+                    <div class="benefit-check">✓</div>
+                    <span>Simple and intuitive to use</span>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-check">✓</div>
+                    <span>Scientifically grounded with practical wisdom</span>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-check">✓</div>
+                    <span>Spiritual, emotional, mental growth in one app</span>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-check">✓</div>
+                    <span>Perfect for students, leaders, entrepreneurs</span>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-check">✓</div>
+                    <span>Faith-based community friendly</span>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-check">✓</div>
+                    <span>No fluff—just life-changing action steps</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA Section -->
+    <section class="final-cta">
+        <h2 class="section-title">🚀 Your Future is Built Today</h2>
+        <p style="font-size: 1.3rem; margin-bottom: 2rem; max-width: 600px; margin-left: auto; margin-right: auto; line-height: 1.6;">
+            Imagine the person you want to be in 2030—and start becoming that version of yourself today with P20'.
+        </p>
+        
+        <div class="stats">
+            <div class="stat">
+                <span class="stat-number">20</span>
+                <span class="stat-label">Life Principles</span>
+            </div>
+            <div class="stat">
+                <span class="stat-number">2030</span>
+                <span class="stat-label">Your Target Year</span>
+            </div>
+            <div class="stat">
+                <span class="stat-number">∞</span>
+                <span class="stat-label">Potential Unlocked</span>
+            </div>
+        </div>
+
+        <p style="font-size: 1.4rem; font-weight: 600; margin: 3rem 0; font-style: italic;">
+            Let every moment count. Let every day build you. Let every principle shape your legacy.
+        </p>
+        
+        <div class="cta-buttons">
+            <a href="#" class="btn btn-primary" style="font-size: 1.2rem; padding: 1.2rem 3rem;">
+                🌟 Transform Your Life Now
+            </a>
+        </div>
+    </section>
+
+    <script>
+        // Add smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add scroll-triggered animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all cards and sections for scroll animations
+        document.querySelectorAll('.principle-card, .feature-card, .benefit-item').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'all 0.6s ease-out';
+            observer.observe(el);
+        });
+
+        // Add parallax effect to hero shapes
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const shapes = document.querySelectorAll('.shape');
+            shapes.forEach((shape, index) => {
+                const speed = 0.5 + (index * 0.1);
+                shape.style.transform = `translateY(${scrolled * speed}px)`;
+            });
+        });
+    </script>
+</body>
+</html>
