@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>P20' - The 2030 Life Principles App - Latest Updates</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 50%, #9b59b6 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+            padding: 40px 0;
+        }
+
+        .header h1 {
+            font-size: 3.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            background: linear-gradient(45deg, #f39c12, #e74c3c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header .tagline {
+            font-size: 1.3em;
+            opacity: 0.9;
+            margin-bottom: 10px;
+        }
+
+        .header .subtitle {
+            font-size: 1em;
+            opacity: 0.8;
+            font-style: italic;
+        }
+
+        .update-card {
+            background: white;
+            border-radius: 20px;
+            padding: 35px;
+            margin-bottom: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-left: 5px solid #3498db;
+        }
+
+        .update-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+        }
+
+        .latest-badge {
+            background: linear-gradient(45deg, #e74c3c, #f39c12);
+            color: white;
+            padding: 10px 18px;
+            border-radius: 25px;
+            font-size: 0.9em;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 20px;
+            animation: pulse 2s infinite;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .version-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 15px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #ecf0f1;
+        }
+
+        .version-number {
+            font-size: 1.6em;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .release-date {
+            color: #7f8c8d;
+            font-style: italic;
+            font-size: 1.1em;
+        }
+
+        .file-size {
+            background: #ecf0f1;
+            padding: 8px 15px;
+            border-radius: 15px;
+            font-size: 0.9em;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .features-list {
+            margin-bottom: 30px;
+        }
+
+        .features-list h3 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.4em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 15px;
+            padding: 15px;
+            background: linear-gradient(135deg, #f8f9ff 0%, #e8f4f8 100%);
+            border-radius: 12px;
+            border-left: 4px solid #3498db;
+            transition: all 0.3s ease;
+        }
+
+        .feature-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.2);
+        }
+
+        .feature-icon {
+            color: #3498db;
+            margin-right: 15px;
+            font-size: 1.3em;
+            margin-top: 3px;
+        }
+
+        .principle-highlight {
+            background: linear-gradient(135deg, #fff5f5 0%, #ffe8e8 100%);
+            border-left: 4px solid #e74c3c;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+
+        .principle-highlight h4 {
+            color: #c0392b;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .download-section {
+            text-align: center;
+            margin-top: 35px;
+        }
+
+        .download-btn {
+            background: linear-gradient(45deg, #3498db, #9b59b6);
+            color: white;
+            padding: 18px 45px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 8px 25px rgba(52, 152, 219, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(52, 152, 219, 0.6);
+        }
+
+        .install-guide {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+            border: 2px solid #f39c12;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 25px;
+        }
+
+        .install-guide h4 {
+            color: #d68910;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .install-step {
+            margin-bottom: 10px;
+            color: #b7950b;
+            font-weight: 500;
+            padding: 5px 0;
+        }
+
+        .changelog {
+            background: linear-gradient(135deg, #e8f5e8 0%, #d5f4e6 100%);
+            border-left: 4px solid #27ae60;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 10px;
+        }
+
+        .changelog h4 {
+            color: #229954;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        .changelog ul {
+            padding-left: 20px;
+        }
+
+        .changelog li {
+            margin-bottom: 8px;
+            color: #1e8449;
+        }
+
+        .bug-fixes {
+            background: linear-gradient(135deg, #fff3cd 0%, #fdeaa7 100%);
+            border-left: 4px solid #f39c12;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 10px;
+        }
+
+        .bug-fixes h4 {
+            color: #d68910;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        .bug-fixes ul {
+            padding-left: 20px;
+        }
+
+        .bug-fixes li {
+            margin-bottom: 8px;
+            color: #b7950b;
+        }
+
+        .stats-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 25px;
+            margin: 50px 0;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-number {
+            font-size: 2.8em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #f39c12;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .stat-label {
+            font-size: 1.1em;
+            font-weight: 600;
+        }
+
+        .principles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .principle-chip {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 20px;
+            text-align: center;
+            font-size: 0.9em;
+            font-weight: 600;
+            transition: transform 0.3s ease;
+        }
+
+        .principle-chip:hover {
+            transform: scale(1.05);
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2.5em;
+            }
+            
+            .version-info {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .download-btn {
+                padding: 15px 35px;
+                font-size: 1em;
+            }
+
+            .container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📚 P20'</h1>
+            <div class="tagline">The 2030 Life Principles App</div>
+            <div class="subtitle">Your Personal Blueprint for Intentional Living & Purposeful Action</div>
+        </div>
+
+        <div class="stats-section">
+            <div class="stat-card">
+                <div class="stat-number">100K+</div>
+                <div class="stat-label">Lives Transformed</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">20</div>
+                <div class="stat-label">Core Principles</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">4.9★</div>
+                <div class="stat-label">User Rating</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">2030</div>
+                <div class="stat-label">Your Best Year</div>
+            </div>
+        </div>
+
+        <!-- Latest Version -->
+        <div class="update-card">
+            <div class="latest-badge">🚀 Latest Version Available</div>
+            
+            <div class="version-info">
+                <div class="version-number">Version 2.5.0</div>
+                <div class="release-date">Released: May 22, 2025</div>
+                <div class="file-size">📦 32.4 MB</div>
+            </div>
+
+            <div class="features-list">
+                <h3>🌟 What's New in This Release</h3>
+                <div class="feature-item">
+                    <span class="feature-icon">🎯</span>
+                    <div>
+                        <strong>Enhanced Daily Growth Tasks:</strong> New AI-powered personalized challenges that adapt to your progress and focus areas across all 20 principles.
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">📊</span>
+                    <div>
+                        <strong>Advanced Progress Analytics:</strong> Comprehensive dashboard showing your growth journey with detailed insights into your strongest and developing principles.
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">🤝</span>
+                    <div>
+                        <strong>Community Mentorship Program:</strong> Connect with experienced mentors and accountability partners who share your commitment to personal growth.
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">📱</span>
+                    <div>
+                        <strong>Offline Mode Enhancement:</strong> Access all core lessons, journaling, and self-assessments without internet connection for uninterrupted growth.
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">🙏</span>
+                    <div>
+                        <strong>Expanded Spiritual Corner:</strong> New devotional content, scripture-based meditations, and faith-integrated goal-setting tools.
+                    </div>
+                </div>
+            </div>
+
+            <div class="principle-highlight">
+                <h4>🎯 Featured Principle Update: Goal Setting & Vision 2030</h4>
+                <p>New interactive vision board creator with milestone tracking, quarterly reviews, and alignment tools to keep your 2030 goals crystal clear and actionable.</p>
+            </div>
+
+            <div class="changelog">
+                <h4>✨ Improvements & Enhancements</h4>
+                <ul>
+                    <li>Faster app loading and smoother navigation experience</li>
+                    <li>Enhanced audio quality for principle lessons and meditations</li>
+                    <li>New achievement badges for consistency streaks and milestone completions</li>
+                    <li>Improved journaling interface with rich text formatting and photo uploads</li>
+                    <li>Better integration between principles for holistic growth tracking</li>
+                    <li>Enhanced accessibility features for inclusive user experience</li>
+                </ul>
+            </div>
+
+            <div class="bug-fixes">
+                <h4>🔧 Bug Fixes & Stability</h4>
+                <ul>
+                    <li>Fixed synchronization issues with cross-device progress tracking</li>
+                    <li>Resolved notification timing problems for daily reminders</li>
+                    <li>Fixed quiz scoring calculations in self-assessment modules</li>
+                    <li>Improved app stability during extended journaling sessions</li>
+                    <li>Fixed audio playback issues on older Android devices</li>
+                </ul>
+            </div>
+
+            <div class="download-section">
+                <a href="#" class="download-btn" onclick="downloadAPK()">
+                    📱 Download P20' APK (32.4 MB)
+                </a>
+                
+                <div class="install-guide">
+                    <h4>📋 Installation Instructions</h4>
+                    <div class="install-step">1. Go to Settings > Security > Enable "Install from Unknown Sources"</div>
+                    <div class="install-step">2. Download the P20' APK file to your device</div>
+                    <div class="install-step">3. Open your Downloads folder and tap the APK file</div>
+                    <div class="install-step">4. Follow the installation prompts</div>
+                    <div class="install-step">5. Launch P20' and begin your transformation journey!</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- The 20 Life Principles Overview -->
+        <div class="update-card">
+            <h3>📘 The 20 Life Principles Covered in P20'</h3>
+            <div class="principles-grid">
+                <div class="principle-chip">⏰ Time Management</div>
+                <div class="principle-chip">🎯 Goal Setting</div>
+                <div class="principle-chip">💪 Resilience & Perseverance</div>
+                <div class="principle-chip">💰 Financial Management</div>
+                <div class="principle-chip">🗣️ Communication</div>
+                <div class="principle-chip">👑 Leadership</div>
+                <div class="principle-chip">🤝 Teamwork & Collaboration</div>
+                <div class="principle-chip">🔄 Adaptability & Flexibility</div>
+                <div class="principle-chip">🧩 Problem-Solving & Creativity</div>
+                <div class="principle-chip">❤️ Emotional Intelligence</div>
+                <div class="principle-chip">🧘 Self-Care & Wellness</div>
+                <div class="principle-chip">🌐 Relationship Building</div>
+                <div class="principle-chip">📈 Personal Growth & Development</div>
+                <div class="principle-chip">✅ Accountability & Responsibility</div>
+                <div class="principle-chip">⚖️ Integrity & Ethics</div>
+                <div class="principle-chip">📚 Learning & Continuous Improvement</div>
+                <div class="principle-chip">🚀 Risk-Taking & Innovation</div>
+                <div class="principle-chip">🎖️ Self-Discipline & Productivity</div>
+                <div class="principle-chip">😊 Positive Attitude & Mindset</div>
+                <div class="principle-chip">🙏 Spiritual Growth & Purpose</div>
+            </div>
+        </div>
+
+        <!-- Previous Version -->
+        <div class="update-card">
+            <div class="version-info">
+                <div class="version-number">Version 2.4.2</div>
+                <div class="release-date">Released: May 8, 2025</div>
+                <div class="file-size">📦 29.1 MB</div>
+            </div>
+
+            <div class="features-list">
+                <h3>Previous Major Updates</h3>
+                <div class="feature-item">
+                    <span class="feature-icon">📝</span>
+                    <div>Introduced interactive journaling with guided reflection prompts</div>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">🏆</span>
+                    <div>Added comprehensive quiz system with instant feedback</div>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">🎨</span>
+                    <div>Redesigned user interface with improved accessibility</div>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">📊</span>
+                    <div>Enhanced progress tracking with detailed analytics</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Older Version -->
+        <div class="update-card">
+            <div class="version-info">
+                <div class="version-number">Version 2.3.0</div>
+                <div class="release-date">Released: April 20, 2025</div>
+                <div class="file-size">📦 26.8 MB</div>
+            </div>
+
+            <div class="features-list">
+                <h3>Foundation Release Highlights</h3>
+                <div class="feature-item">
+                    <span class="feature-icon">🌟</span>
+                    <div>Launch of all 20 core life principles with multimedia content</div>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">👥</span>
+                    <div>Community support platform for accountability partners</div>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">🙏</span>
+                    <div>Spiritual Corner with biblical guidance and devotions</div>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">📱</span>
+                    <div>Mobile-first design optimized for daily use</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function downloadAPK() {
+            const btn = event.target;
+            const originalText = btn.innerHTML;
+            
+            btn.innerHTML = '⏳ Preparing Your Growth Journey...';
+            btn.style.background = 'linear-gradient(45deg, #27ae60, #2ecc71)';
+            
+            setTimeout(() => {
+                btn.innerHTML = '✅ Download Started! Transform Your 2030!';
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.style.background = 'linear-gradient(45deg, #3498db, #9b59b6)';
+                }, 3000);
+            }, 2000);
+            
+            console.log('P20\' APK download initiated - Your journey to 2030 begins!');
+        }
+
+        // Enhanced animations for principle-focused experience
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.update-card');
+            const chips = document.querySelectorAll('.principle-chip');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            });
+
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                card.style.transition = `opacity 0.8s ease ${index * 0.15}s, transform 0.8s ease ${index * 0.15}s`;
+                observer.observe(card);
+            });
+
+            // Animate principle chips
+            chips.forEach((chip, index) => {
+                chip.style.opacity = '0';
+                chip.style.transform = 'scale(0.8)';
+                chip.style.transition = `opacity 0.5s ease ${index * 0.05}s, transform 0.5s ease ${index * 0.05}s`;
+                
+                setTimeout(() => {
+                    chip.style.opacity = '1';
+                    chip.style.transform = 'scale(1)';
+                }, index * 50);
+            });
+        });
+    </script>
+</body>
+</html>
