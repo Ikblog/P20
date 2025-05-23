@@ -1,0 +1,1251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Notepad</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #667eea;
+            --primary-dark: #5a6fd8;
+            --secondary-color: #764ba2;
+            --background: #f8fafc;
+            --surface: #ffffff;
+            --text-primary: #1a202c;
+            --text-secondary: #4a5568;
+            --border: #e2e8f0;
+            --shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            --shadow-light: 0 4px 6px rgba(0, 0, 0, 0.05);
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+        }
+
+        [data-theme="dark"] {
+            --background: #0f172a;
+            --surface: #1e293b;
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --border: #334155;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--background);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header-controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            box-shadow: var(--shadow-light);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .btn-secondary {
+            background: var(--surface);
+            color: var(--text-primary);
+            border: 2px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .theme-toggle {
+            background: var(--surface);
+            border: 2px solid var(--border);
+            border-radius: 50px;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            border-color: var(--primary-color);
+            transform: scale(1.05);
+        }
+
+        .search-bar {
+            background: var(--surface);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 12px 16px;
+            font-size: 16px;
+            width: 100%;
+            max-width: 400px;
+            transition: all 0.3s ease;
+            color: var(--text-primary);
+        }
+
+        .search-bar:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .sort-select {
+            background: var(--surface);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 12px 16px;
+            font-size: 14px;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .sort-select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .notes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+        }
+
+        .note-card {
+            background: var(--surface);
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: var(--shadow-light);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            position: relative;
+            cursor: move;
+        }
+
+        .note-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow);
+            border-color: var(--primary-color);
+        }
+
+        .note-card.dragging {
+            opacity: 0.5;
+            transform: rotate(5deg);
+        }
+
+        .note-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+            gap: 15px;
+        }
+
+        .note-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--text-primary);
+            flex: 1;
+            word-break: break-word;
+        }
+
+        .note-actions {
+            display: flex;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+
+        .action-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            color: var(--text-secondary);
+        }
+
+        .action-btn:hover {
+            background: var(--border);
+            color: var(--text-primary);
+        }
+
+        .note-content {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 15px;
+            word-break: break-word;
+        }
+
+        .note-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .tag {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .todo-section {
+            border-top: 2px solid var(--border);
+            padding-top: 15px;
+            margin-top: 15px;
+        }
+
+        .todo-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .todo-title {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .add-todo-btn {
+            background: var(--success);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .add-todo-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .todo-list {
+            list-style: none;
+        }
+
+        .todo-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .todo-item:last-child {
+            border-bottom: none;
+        }
+
+        .todo-checkbox {
+            width: 18px;
+            height: 18px;
+            border-radius: 4px;
+            border: 2px solid var(--border);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .todo-checkbox.checked {
+            background: var(--success);
+            border-color: var(--success);
+            color: white;
+        }
+
+        .todo-text {
+            flex: 1;
+            color: var(--text-secondary);
+            transition: all 0.3s ease;
+        }
+
+        .todo-text.completed {
+            text-decoration: line-through;
+            opacity: 0.6;
+        }
+
+        .todo-delete {
+            background: var(--danger);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            opacity: 0;
+        }
+
+        .todo-item:hover .todo-delete {
+            opacity: 1;
+        }
+
+        .note-meta {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid var(--border);
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: var(--surface);
+            border-radius: 16px;
+            padding: 30px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: scale(0.9);
+            transition: all 0.3s ease;
+        }
+
+        .modal.active .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--text-primary);
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: all 0.3s ease;
+        }
+
+        .close-btn:hover {
+            color: var(--danger);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: var(--background);
+            color: var(--text-primary);
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        .tags-input {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 8px 12px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            background: var(--background);
+            min-height: 48px;
+            cursor: text;
+        }
+
+        .tags-input:focus-within {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .tag-item {
+            background: var(--primary-color);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 16px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .tag-remove {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .tag-input {
+            border: none;
+            outline: none;
+            background: transparent;
+            color: var(--text-primary);
+            flex: 1;
+            min-width: 100px;
+            font-size: 14px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-secondary);
+        }
+
+        .empty-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            opacity: 0.3;
+        }
+
+        .empty-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .empty-description {
+            font-size: 1rem;
+            opacity: 0.8;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            .header {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 15px;
+            }
+
+            .header-controls {
+                justify-content: center;
+            }
+
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search-bar {
+                max-width: none;
+            }
+
+            .notes-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .note-card {
+                padding: 20px;
+            }
+
+            .modal-content {
+                margin: 20px;
+                width: calc(100% - 40px);
+            }
+
+            .btn {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo {
+                font-size: 1.5rem;
+            }
+
+            .btn {
+                padding: 10px 16px;
+                font-size: 12px;
+            }
+
+            .note-card {
+                padding: 15px;
+            }
+
+            .modal-content {
+                padding: 20px;
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .slide-in {
+            animation: slideIn 0.3s ease forwards;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="logo">NotePro</h1>
+            <div class="header-controls">
+                <input type="text" class="search-bar" placeholder="Search notes..." id="searchInput" aria-label="Search notes">
+                <button class="btn btn-primary" id="addNoteBtn" aria-label="Add new note">
+                    ➕ Add Note
+                </button>
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <div class="controls">
+            <select class="sort-select" id="sortSelect" aria-label="Sort notes">
+                <option value="modified">Sort by Modified</option>
+                <option value="created">Sort by Created</option>
+                <option value="title">Sort by Title</option>
+            </select>
+            <button class="btn btn-secondary" id="exportAllBtn" aria-label="Export all notes">
+                📥 Export All
+            </button>
+        </div>
+
+        <div class="notes-grid" id="notesGrid">
+            <div class="empty-state" id="emptyState">
+                <div class="empty-icon">📝</div>
+                <h2 class="empty-title">No notes yet</h2>
+                <p class="empty-description">Create your first note to get started!</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Note Modal -->
+    <div class="modal" id="noteModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalTitle">Add New Note</h2>
+                <button class="close-btn" id="closeModal" aria-label="Close modal">&times;</button>
+            </div>
+            <form id="noteForm">
+                <div class="form-group">
+                    <label class="form-label" for="noteTitle">Title</label>
+                    <input type="text" id="noteTitle" class="form-input" required aria-label="Note title">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="noteContent">Content</label>
+                    <textarea id="noteContent" class="form-input form-textarea" placeholder="Write your note here..." aria-label="Note content"></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="noteTags">Tags</label>
+                    <div class="tags-input" id="tagsInput">
+                        <input type="text" class="tag-input" id="tagInput" placeholder="Add tags..." aria-label="Add tags">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary" id="saveNoteBtn">💾 Save Note</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        class NotepadApp {
+            constructor() {
+                this.notes = [];
+                this.currentNoteId = null;
+                this.isDarkMode = false;
+                this.draggedElement = null;
+                
+                this.init();
+            }
+
+            init() {
+                this.loadNotes();
+                this.setupEventListeners();
+                this.setupTheme();
+                this.render();
+            }
+
+            setupEventListeners() {
+                // Note modal
+                document.getElementById('addNoteBtn').addEventListener('click', () => this.openNoteModal());
+                document.getElementById('closeModal').addEventListener('click', () => this.closeNoteModal());
+                document.getElementById('noteForm').addEventListener('submit', (e) => this.saveNote(e));
+                
+                // Search and sort
+                document.getElementById('searchInput').addEventListener('input', (e) => this.searchNotes(e.target.value));
+                document.getElementById('sortSelect').addEventListener('change', (e) => this.sortNotes(e.target.value));
+                
+                // Theme toggle
+                document.getElementById('themeToggle').addEventListener('click', () => this.toggleTheme());
+                
+                // Export all
+                document.getElementById('exportAllBtn').addEventListener('click', () => this.exportAllNotes());
+                
+                // Tags input
+                document.getElementById('tagInput').addEventListener('keydown', (e) => this.handleTagInput(e));
+                
+                // Modal backdrop
+                document.getElementById('noteModal').addEventListener('click', (e) => {
+                    if (e.target === e.currentTarget) this.closeNoteModal();
+                });
+
+                // Keyboard shortcuts
+                document.addEventListener('keydown', (e) => {
+                    if (e.ctrlKey && e.key === 'n') {
+                        e.preventDefault();
+                        this.openNoteModal();
+                    }
+                    if (e.key === 'Escape') {
+                        this.closeNoteModal();
+                    }
+                });
+            }
+
+            setupTheme() {
+                const savedTheme = this.getFromStorage('theme');
+                if (savedTheme === 'dark') {
+                    this.toggleTheme();
+                }
+            }
+
+            loadNotes() {
+                const savedNotes = this.getFromStorage('notes');
+                this.notes = savedNotes || [];
+            }
+
+            saveNotes() {
+                this.setToStorage('notes', this.notes);
+            }
+
+            // Storage methods (using in-memory storage for Claude environment)
+            getFromStorage(key) {
+                if (typeof window !== 'undefined' && window.localStorage) {
+                    try {
+                        return JSON.parse(localStorage.getItem(key));
+                    } catch (e) {
+                        return null;
+                    }
+                }
+                return this.memoryStorage?.[key] || null;
+            }
+
+            setToStorage(key, value) {
+                if (typeof window !== 'undefined' && window.localStorage) {
+                    try {
+                        localStorage.setItem(key, JSON.stringify(value));
+                    } catch (e) {
+                        // Fallback to memory storage
+                        this.memoryStorage = this.memoryStorage || {};
+                        this.memoryStorage[key] = value;
+                    }
+                } else {
+                    this.memoryStorage = this.memoryStorage || {};
+                    this.memoryStorage[key] = value;
+                }
+            }
+
+            generateId() {
+                return Date.now().toString(36) + Math.random().toString(36).substr(2);
+            }
+
+            openNoteModal(noteId = null) {
+                this.currentNoteId = noteId;
+                const modal = document.getElementById('noteModal');
+                const modalTitle = document.getElementById('modalTitle');
+                const form = document.getElementById('noteForm');
+                
+                if (noteId) {
+                    const note = this.notes.find(n => n.id === noteId);
+                    modalTitle.textContent = 'Edit Note';
+                    document.getElementById('noteTitle').value = note.title;
+                    document.getElementById('noteContent').value = note.content;
+                    this.renderTags(note.tags || []);
+                } else {
+                    modalTitle.textContent = 'Add New Note';
+                    form.reset();
+                    this.renderTags([]);
+                }
+                
+                modal.classList.add('active');
+                document.getElementById('noteTitle').focus();
+            }
+
+            closeNoteModal() {
+                const modal = document.getElementById('noteModal');
+                modal.classList.remove('active');
+                this.currentNoteId = null;
+            }
+
+            saveNote(e) {
+                e.preventDefault();
+                
+                const title = document.getElementById('noteTitle').value.trim();
+                const content = document.getElementById('noteContent').value.trim();
+                const tags = this.getCurrentTags();
+                
+                if (!title) return;
+                
+                const now = new Date().toISOString();
+                
+                if (this.currentNoteId) {
+                    // Edit existing note
+                    const noteIndex = this.notes.findIndex(n => n.id === this.currentNoteId);
+                    this.notes[noteIndex] = {
+                        ...this.notes[noteIndex],
+                        title,
+                        content,
+                        tags,
+                        modified: now
+                    };
+                } else {
+                    // Create new note
+                    const newNote = {
+                        id: this.generateId(),
+                        title,
+                        content,
+                        tags,
+                        todos: [],
+                        created: now,
+                        modified: now
+                    };
+                    this.notes.unshift(newNote);
+                }
+                
+                this.saveNotes();
+                this.render();
+                this.closeNoteModal();
+            }
+
+            deleteNote(noteId) {
+                if (confirm('Are you sure you want to delete this note?')) {
+                    this.notes = this.notes.filter(n => n.id !== noteId);
+                    this.saveNotes();
+                    this.render();
+                }
+            }
+
+            exportNote(noteId) {
+                const note = this.notes.find(n => n.id === noteId);
+                if (!note) return;
+                
+                let content = `${note.title}\n${'='.repeat(note.title.length)}\n\n${note.content}`;
+                
+                if (note.tags && note.tags.length > 0) {
+                    content += `\n\nTags: ${note.tags.join(', ')}`;
+                }
+                
+                if (note.todos && note.todos.length > 0) {
+                    content += '\n\nTo-Do List:\n';
+                    note.todos.forEach(todo => {
+                        content += `${todo.completed ? '✓' : '○'} ${todo.text}\n`;
+                    });
+                }
+                
+                content += `\n\nCreated: ${new Date(note.created).toLocaleString()}`;
+                content += `\nModified: ${new Date(note.modified).toLocaleString()}`;
+                
+                this.downloadFile(`${note.title}.txt`, content);
+            }
+
+            exportAllNotes() {
+                if (this.notes.length === 0) {
+                    alert('No notes to export!');
+                    return;
+                }
+                
+                let content = 'All Notes Export\n' + '='.repeat(50) + '\n\n';
+                
+                this.notes.forEach((note, index) => {
+                    content += `${index + 1}. ${note.title}\n${'-'.repeat(note.title.length + 3)}\n`;
+                    content += `${note.content}\n`;
+                    
+                    if (note.tags && note.tags.length > 0) {
+                        content += `Tags: ${note.tags.join(', ')}\n`;
+                    }
+                    
+                    if (note.todos && note.todos.length > 0) {
+                        content += 'To-Do List:\n';
+                        note.todos.forEach(todo => {
+                            content += `  ${todo.completed ? '✓' : '○'} ${todo.text}\n`;
+                        });
+                    }
+                    
+                    content += `Created: ${new Date(note.created).toLocaleString()}\n`;
+                    content += `Modified: ${new Date(note.modified).toLocaleString()}\n\n`;
+                });
+                
+                this.downloadFile('all-notes.txt', content);
+            }
+
+            downloadFile(filename, content) {
+                const blob = new Blob([content], { type: 'text/plain' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }
+
+            addTodo(noteId) {
+                const text = prompt('Enter todo item:');
+                if (!text) return;
+                
+                const note = this.notes.find(n => n.id === noteId);
+                if (!note.todos) note.todos = [];
+                
+                note.todos.push({
+                    id: this.generateId(),
+                    text: text.trim(),
+                    completed: false
+                });
+                
+                note.modified = new Date().toISOString();
+                this.saveNotes();
+                this.render();
+            }
+
+            toggleTodo(noteId, todoId) {
+                const note = this.notes.find(n => n.id === noteId);
+                const todo = note.todos.find(t => t.id === todoId);
+                todo.completed = !todo.completed;
+                note.modified = new Date().toISOString();
+                this.saveNotes();
+                this.render();
+            }
+
+            deleteTodo(noteId, todoId) {
+                const note = this.notes.find(n => n.id === noteId);
+                note.todos = note.todos.filter(t => t.id !== todoId);
+                note.modified = new Date().toISOString();
+                this.saveNotes();
+                this.render();
+            }
+
+            searchNotes(query) {
+                const filteredNotes = this.notes.filter(note => 
+                    note.title.toLowerCase().includes(query.toLowerCase()) ||
+                    note.content.toLowerCase().includes(query.toLowerCase()) ||
+                    (note.tags && note.tags.some(tag => tag.toLowerCase().includes(query.toLowerCase())))
+                );
+                this.renderNotes(filteredNotes);
+            }
+
+            sortNotes(sortBy) {
+                let sortedNotes = [...this.notes];
+                
+                switch (sortBy) {
+                    case 'created':
+                        sortedNotes.sort((a, b) => new Date(b.created) - new Date(a.created));
+                        break;
+                    case 'modified':
+                        sortedNotes.sort((a, b) => new Date(b.modified) - new Date(a.modified));
+                        break;
+                    case 'title':
+                        sortedNotes.sort((a, b) => a.title.localeCompare(b.title));
+                        break;
+                }
+                
+                this.renderNotes(sortedNotes);
+            }
+
+            toggleTheme() {
+                this.isDarkMode = !this.isDarkMode;
+                const themeToggle = document.getElementById('themeToggle');
+                
+                if (this.isDarkMode) {
+                    document.body.setAttribute('data-theme', 'dark');
+                    themeToggle.textContent = '☀️';
+                    this.setToStorage('theme', 'dark');
+                } else {
+                    document.body.removeAttribute('data-theme');
+                    themeToggle.textContent = '🌙';
+                    this.setToStorage('theme', 'light');
+                }
+            }
+
+            handleTagInput(e) {
+                if (e.key === 'Enter' || e.key === ',') {
+                    e.preventDefault();
+                    const value = e.target.value.trim();
+                    if (value) {
+                        this.addTag(value);
+                        e.target.value = '';
+                    }
+                }
+            }
+
+            addTag(tagText) {
+                const tagsContainer = document.getElementById('tagsInput');
+                const existingTags = this.getCurrentTags();
+                
+                if (existingTags.includes(tagText)) return;
+                
+                const tagElement = document.createElement('div');
+                tagElement.className = 'tag-item';
+                tagElement.innerHTML = `
+                    <span>${tagText}</span>
+                    <button type="button" class="tag-remove" onclick="this.parentElement.remove()">×</button>
+                `;
+                
+                tagsContainer.insertBefore(tagElement, tagsContainer.lastElementChild);
+            }
+
+            getCurrentTags() {
+                const tagElements = document.querySelectorAll('#tagsInput .tag-item span');
+                return Array.from(tagElements).map(el => el.textContent);
+            }
+
+            renderTags(tags) {
+                const tagsContainer = document.getElementById('tagsInput');
+                const tagInput = tagsContainer.querySelector('.tag-input');
+                
+                // Clear existing tags
+                tagsContainer.innerHTML = '';
+                
+                // Add existing tags
+                tags.forEach(tag => {
+                    const tagElement = document.createElement('div');
+                    tagElement.className = 'tag-item';
+                    tagElement.innerHTML = `
+                        <span>${tag}</span>
+                        <button type="button" class="tag-remove" onclick="this.parentElement.remove()">×</button>
+                    `;
+                    tagsContainer.appendChild(tagElement);
+                });
+                
+                // Add input field back
+                tagsContainer.appendChild(tagInput);
+            }
+
+            setupDragAndDrop() {
+                const notesGrid = document.getElementById('notesGrid');
+                
+                notesGrid.addEventListener('dragstart', (e) => {
+                    if (e.target.classList.contains('note-card')) {
+                        this.draggedElement = e.target;
+                        e.target.classList.add('dragging');
+                        e.dataTransfer.effectAllowed = 'move';
+                    }
+                });
+
+                notesGrid.addEventListener('dragend', (e) => {
+                    if (e.target.classList.contains('note-card')) {
+                        e.target.classList.remove('dragging');
+                        this.draggedElement = null;
+                    }
+                });
+
+                notesGrid.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    e.dataTransfer.dropEffect = 'move';
+                });
+
+                notesGrid.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    if (this.draggedElement && e.target.classList.contains('note-card')) {
+                        this.reorderNotes(this.draggedElement, e.target);
+                    }
+                });
+            }
+
+            reorderNotes(draggedCard, targetCard) {
+                const draggedId = draggedCard.dataset.noteId;
+                const targetId = targetCard.dataset.noteId;
+                
+                const draggedIndex = this.notes.findIndex(n => n.id === draggedId);
+                const targetIndex = this.notes.findIndex(n => n.id === targetId);
+                
+                if (draggedIndex !== -1 && targetIndex !== -1) {
+                    const draggedNote = this.notes.splice(draggedIndex, 1)[0];
+                    this.notes.splice(targetIndex, 0, draggedNote);
+                    this.saveNotes();
+                    this.render();
+                }
+            }
+
+            render() {
+                this.renderNotes(this.notes);
+            }
+
+            renderNotes(notesToRender) {
+                const notesGrid = document.getElementById('notesGrid');
+                const emptyState = document.getElementById('emptyState');
+                
+                if (notesToRender.length === 0) {
+                    notesGrid.innerHTML = '';
+                    notesGrid.appendChild(emptyState);
+                    return;
+                }
+                
+                notesGrid.innerHTML = notesToRender.map(note => `
+                    <div class="note-card fade-in" draggable="true" data-note-id="${note.id}">
+                        <div class="note-header">
+                            <h3 class="note-title">${this.escapeHtml(note.title)}</h3>
+                            <div class="note-actions">
+                                <button class="action-btn" onclick="app.openNoteModal('${note.id}')" aria-label="Edit note" title="Edit">
+                                    ✏️
+                                </button>
+                                <button class="action-btn" onclick="app.exportNote('${note.id}')" aria-label="Export note" title="Export">
+                                    📥
+                                </button>
+                                <button class="action-btn" onclick="app.deleteNote('${note.id}')" aria-label="Delete note" title="Delete">
+                                    🗑️
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="note-content">${this.escapeHtml(note.content || '').substring(0, 150)}${note.content && note.content.length > 150 ? '...' : ''}</div>
+                        
+                        ${note.tags && note.tags.length > 0 ? `
+                            <div class="note-tags">
+                                ${note.tags.map(tag => `<span class="tag">${this.escapeHtml(tag)}</span>`).join('')}
+                            </div>
+                        ` : ''}
+                        
+                        ${note.todos && note.todos.length > 0 ? `
+                            <div class="todo-section">
+                                <div class="todo-header">
+                                    <span class="todo-title">Tasks (${note.todos.filter(t => t.completed).length}/${note.todos.length})</span>
+                                    <button class="add-todo-btn" onclick="app.addTodo('${note.id}')" aria-label="Add todo" title="Add Task">
+                                        +
+                                    </button>
+                                </div>
+                                <ul class="todo-list">
+                                    ${note.todos.slice(0, 3).map(todo => `
+                                        <li class="todo-item">
+                                            <div class="todo-checkbox ${todo.completed ? 'checked' : ''}" 
+                                                 onclick="app.toggleTodo('${note.id}', '${todo.id}')"
+                                                 aria-label="${todo.completed ? 'Mark as incomplete' : 'Mark as complete'}"
+                                                 title="${todo.completed ? 'Mark as incomplete' : 'Mark as complete'}">
+                                                ${todo.completed ? '✓' : ''}
+                                            </div>
+                                            <span class="todo-text ${todo.completed ? 'completed' : ''}">${this.escapeHtml(todo.text)}</span>
+                                            <button class="todo-delete" onclick="app.deleteTodo('${note.id}', '${todo.id}')" 
+                                                    aria-label="Delete todo" title="Delete">
+                                                ×
+                                            </button>
+                                        </li>
+                                    `).join('')}
+                                    ${note.todos.length > 3 ? `<li class="todo-item"><span class="todo-text">... and ${note.todos.length - 3} more</span></li>` : ''}
+                                </ul>
+                            </div>
+                        ` : `
+                            <div class="todo-section">
+                                <div class="todo-header">
+                                    <span class="todo-title">Tasks</span>
+                                    <button class="add-todo-btn" onclick="app.addTodo('${note.id}')" aria-label="Add todo" title="Add Task">
+                                        +
+                                    </button>
+                                </div>
+                            </div>
+                        `}
+                        
+                        <div class="note-meta">
+                            Created: ${new Date(note.created).toLocaleDateString()} • 
+                            Modified: ${new Date(note.modified).toLocaleDateString()}
+                        </div>
+                    </div>
+                `).join('');
+                
+                // Setup drag and drop after rendering
+                this.setupDragAndDrop();
+            }
+
+            escapeHtml(text) {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+        }
+
+        // Initialize the app
+        const app = new NotepadApp();
+
+        // Add some sample data for demonstration
+        if (app.notes.length === 0) {
+            const sampleNotes = [
+                {
+                    id: app.generateId(),
+                    title: "Welcome to NotePad!",
+                    content: "This is your first note. You can edit, delete, or export it. Try adding some todos or tags!",
+                    tags: ["welcome", "tutorial"],
+                    todos: [
+                        { id: app.generateId(), text: "Create your first note", completed: true },
+                        { id: app.generateId(), text: "Try the search feature", completed: false },
+                        { id: app.generateId(), text: "Export a note", completed: false }
+                    ],
+                    created: new Date().toISOString(),
+                    modified: new Date().toISOString()
+                },
+                {
+                    id: app.generateId(),
+                    title: "Shopping List",
+                    content: "Don't forget to buy groceries this weekend!",
+                    tags: ["shopping", "personal"],
+                    todos: [
+                        { id: app.generateId(), text: "Milk", completed: false },
+                        { id: app.generateId(), text: "Bread", completed: false },
+                        { id: app.generateId(), text: "Eggs", completed: true },
+                        { id: app.generateId(), text: "Bananas", completed: false }
+                    ],
+                    created: new Date(Date.now() - 86400000).toISOString(),
+                    modified: new Date(Date.now() - 3600000).toISOString()
+                }
+            ];
+            
+            app.notes = sampleNotes;
+            app.saveNotes();
+            app.render();
+        }
+    </script>
+</body>
+</html>
