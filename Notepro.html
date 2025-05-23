@@ -41,6 +41,8 @@
             color: var(--text-primary);
             transition: all 0.3s ease;
             min-height: 100vh;
+            justify-content: center;
+            align-items: flex-start;
         }
 
         .container {
@@ -52,11 +54,12 @@
 
         .header {
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
             margin-bottom: 30px;
             flex-wrap: wrap;
             gap: 20px;
+            text-align: center;
         }
 
         .logo {
@@ -632,7 +635,7 @@
 <body>
     <div class="container">
         <header class="header">
-            <h1 class="logo">NotePro</h1>
+            <h1 class="logo">📝 SMART NOTE</h1>
             <div class="header-controls">
                 <input type="text" class="search-bar" placeholder="Search notes..." id="searchInput" aria-label="Search notes">
                 <button class="btn btn-primary" id="addNoteBtn" aria-label="Add new note">
@@ -693,11 +696,34 @@
         </div>
     </div>
 
+    <!-- Todo Modal -->
+    <div class="modal" id="todoModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Add New Task</h2>
+                <button class="close-btn" id="closeTodoModal" aria-label="Close modal">&times;</button>
+            </div>
+            <form id="todoForm">
+                <div class="form-group">
+                    <label class="form-label" for="todoText">Task Description</label>
+                    <input type="text" id="todoText" class="form-input" required placeholder="Enter task description..." aria-label="Task description">
+                </div>
+                <div class="form-group">
+                    <div style="display: flex; gap: 10px;">
+                        <button type="submit" class="btn btn-primary">✅ Add Task</button>
+                        <button type="button" class="btn btn-secondary" id="cancelTodoBtn">❌ Cancel</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script>
         class NotepadApp {
             constructor() {
                 this.notes = [];
                 this.currentNoteId = null;
+                this.currentTodoNoteId = null;
                 this.isDarkMode = false;
                 this.draggedElement = null;
                 
@@ -717,6 +743,11 @@
                 document.getElementById('closeModal').addEventListener('click', () => this.closeNoteModal());
                 document.getElementById('noteForm').addEventListener('submit', (e) => this.saveNote(e));
                 
+                // Todo modal
+                document.getElementById('closeTodoModal').addEventListener('click', () => this.closeTodoModal());
+                document.getElementById('cancelTodoBtn').addEventListener('click', () => this.closeTodoModal());
+                document.getElementById('todoForm').addEventListener('submit', (e) => this.saveTodo(e));
+                
                 // Search and sort
                 document.getElementById('searchInput').addEventListener('input', (e) => this.searchNotes(e.target.value));
                 document.getElementById('sortSelect').addEventListener('change', (e) => this.sortNotes(e.target.value));
@@ -735,6 +766,10 @@
                     if (e.target === e.currentTarget) this.closeNoteModal();
                 });
 
+                document.getElementById('todoModal').addEventListener('click', (e) => {
+                    if (e.target === e.currentTarget) this.closeTodoModal();
+                });
+
                 // Keyboard shortcuts
                 document.addEventListener('keydown', (e) => {
                     if (e.ctrlKey && e.key === 'n') {
@@ -743,6 +778,7 @@
                     }
                     if (e.key === 'Escape') {
                         this.closeNoteModal();
+                        this.closeTodoModal();
                     }
                 });
             }
@@ -820,6 +856,41 @@
                 const modal = document.getElementById('noteModal');
                 modal.classList.remove('active');
                 this.currentNoteId = null;
+            }
+
+            openTodoModal(noteId) {
+                this.currentTodoNoteId = noteId;
+                const modal = document.getElementById('todoModal');
+                document.getElementById('todoText').value = '';
+                modal.classList.add('active');
+                document.getElementById('todoText').focus();
+            }
+
+            closeTodoModal() {
+                const modal = document.getElementById('todoModal');
+                modal.classList.remove('active');
+                this.currentTodoNoteId = null;
+            }
+
+            saveTodo(e) {
+                e.preventDefault();
+                
+                const text = document.getElementById('todoText').value.trim();
+                if (!text || !this.currentTodoNoteId) return;
+                
+                const note = this.notes.find(n => n.id === this.currentTodoNoteId);
+                if (!note.todos) note.todos = [];
+                
+                note.todos.push({
+                    id: this.generateId(),
+                    text: text,
+                    completed: false
+                });
+                
+                note.modified = new Date().toISOString();
+                this.saveNotes();
+                this.render();
+                this.closeTodoModal();
             }
 
             saveNote(e) {
@@ -936,21 +1007,7 @@
             }
 
             addTodo(noteId) {
-                const text = prompt('Enter todo item:');
-                if (!text) return;
-                
-                const note = this.notes.find(n => n.id === noteId);
-                if (!note.todos) note.todos = [];
-                
-                note.todos.push({
-                    id: this.generateId(),
-                    text: text.trim(),
-                    completed: false
-                });
-                
-                note.modified = new Date().toISOString();
-                this.saveNotes();
-                this.render();
+                this.openTodoModal(noteId);
             }
 
             toggleTodo(noteId, todoId) {
